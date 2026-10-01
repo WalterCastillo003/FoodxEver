@@ -39,6 +39,10 @@ En Windows:
 ```powershell
 .\mvnw.cmd spring-boot:run
 
-http://localhost:8080
+## Demo
+
+La aplicación se encuentra desplegada en Railway:
+
+(foodxever-production.up.railway.app)
 
 Proyecto desarrollado para el curso de Marcos de Desarrollo Web.
