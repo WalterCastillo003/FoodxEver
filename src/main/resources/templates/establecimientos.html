@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html
+    lang="es"
+    xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Establecimientos | FoodxEver</title>
+
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+
+    <link
+        rel="stylesheet"
+        th:href="@{/css/styles.css}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav
+        class="navbar navbar-expand-lg
+        navbar-dark bg-success"
+    >
+
+        <div class="container">
+
+            <a
+                class="navbar-brand fw-bold"
+                th:href="@{/}"
+            >
+
+                <i
+                    class="bi bi-basket2-fill me-2"
+                ></i>
+
+                FoodxEver
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarFoodxEver"
+            >
+
+                <span
+                    class="navbar-toggler-icon"
+                ></span>
+
+            </button>
+
+
+            <div
+                class="collapse navbar-collapse"
+                id="navbarFoodxEver"
+            >
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/}"
+                        >
+                            Inicio
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/productos}"
+                        >
+                            Productos
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/reservas}"
+                        >
+                            Reservas
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/estadisticas}"
+                        >
+                            Estadísticas
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link active"
+                            th:href="@{/establecimientos}"
+                        >
+                            Establecimientos
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ENCABEZADO -->
+
+    <header
+        class="bg-light border-bottom py-5"
+    >
+
+        <div class="container">
+
+            <div
+                class="d-flex flex-column
+                flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3"
+            >
+
+                <div>
+
+                    <span
+                        class="text-success fw-bold"
+                    >
+                        FOODXEVER
+                    </span>
+
+
+                    <h1 class="fw-bold mt-2">
+
+                        Establecimientos
+
+                    </h1>
+
+
+                    <p
+                        class="text-secondary mb-0"
+                    >
+
+                        Administra los negocios registrados
+                        en la plataforma.
+
+                    </p>
+
+                </div>
+
+
+                <a
+                    th:href="@{/establecimientos/nuevo}"
+                    class="btn btn-success btn-lg"
+                >
+
+                    <i
+                        class="bi bi-shop-window me-2"
+                    ></i>
+
+                    Nuevo establecimiento
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- CONTENIDO -->
+
+    <main class="py-5">
+
+        <div class="container">
+
+
+            <!-- BUSCADOR -->
+
+            <form
+                th:action="@{/establecimientos/buscar}"
+                method="get"
+                class="mb-4"
+            >
+
+                <div class="row g-2">
+
+                    <div class="col-md-9">
+
+                        <input
+                            type="text"
+                            name="nombre"
+                            class="form-control form-control-lg"
+                            placeholder="Buscar establecimiento..."
+                            th:value="${busqueda}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-3 d-grid">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg"
+                        >
+
+                            <i
+                                class="bi bi-search me-1"
+                            ></i>
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+
+            <div
+                class="mb-4"
+                th:if="${busqueda != null and !busqueda.isEmpty()}"
+            >
+
+                <a
+                    th:href="@{/establecimientos}"
+                    class="btn btn-outline-secondary"
+                >
+
+                    Mostrar todos
+
+                </a>
+
+            </div>
+
+
+
+            <!-- TABLA -->
+
+            <div
+                class="card border-0 shadow-sm"
+            >
+
+                <div
+                    class="card-body p-0"
+                >
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table table-hover
+                            align-middle mb-0"
+                        >
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th class="ps-4">
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Nombre
+                                    </th>
+
+                                    <th>
+                                        Categoría
+                                    </th>
+
+                                    <th>
+                                        Dirección
+                                    </th>
+
+                                    <th>
+                                        Teléfono
+                                    </th>
+
+                                    <th>
+                                        Correo
+                                    </th>
+
+                                    <th
+                                        class="text-center"
+                                    >
+                                        Acciones
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                <tr
+                                    th:each="establecimiento : ${establecimientos}"
+                                >
+
+                                    <td
+                                        class="ps-4"
+                                        th:text="${establecimiento.id}"
+                                    >
+                                        1
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong
+                                            th:text="${establecimiento.nombre}"
+                                        >
+                                            Negocio
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            class="badge text-bg-light"
+                                            th:text="${establecimiento.categoria}"
+                                        >
+                                            Categoría
+                                        </span>
+
+                                    </td>
+
+
+                                    <td
+                                        th:text="${establecimiento.direccion}"
+                                    >
+                                        Dirección
+                                    </td>
+
+
+                                    <td
+                                        th:text="${establecimiento.telefono}"
+                                    >
+                                        Teléfono
+                                    </td>
+
+
+                                    <td
+                                        th:text="${establecimiento.correo}"
+                                    >
+                                        Correo
+                                    </td>
+
+
+                                    <td>
+
+                                        <div
+                                            class="d-flex
+                                            justify-content-center
+                                            flex-wrap gap-2"
+                                        >
+
+
+                                            <a
+                                                th:href="@{/establecimientos/detalle/{id}(id=${establecimiento.id})}"
+                                                class="btn
+                                                btn-outline-primary
+                                                btn-sm"
+                                            >
+
+                                                <i
+                                                    class="bi bi-eye"
+                                                ></i>
+
+                                                Ver
+
+                                            </a>
+
+
+                                            <a
+                                                th:href="@{/establecimientos/editar/{id}(id=${establecimiento.id})}"
+                                                class="btn
+                                                btn-outline-success
+                                                btn-sm"
+                                            >
+
+                                                <i
+                                                    class="bi bi-pencil"
+                                                ></i>
+
+                                                Editar
+
+                                            </a>
+
+
+                                            <form
+                                                th:action="@{/establecimientos/eliminar/{id}(id=${establecimiento.id})}"
+                                                method="post"
+                                                onsubmit="return confirm('¿Deseas eliminar este establecimiento?');"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn
+                                                    btn-outline-danger
+                                                    btn-sm"
+                                                >
+
+                                                    <i
+                                                        class="bi bi-trash"
+                                                    ></i>
+
+                                                    Eliminar
+
+                                                </button>
+
+                                            </form>
+
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <!-- SIN RESULTADOS -->
+
+                                <tr
+                                    th:if="${#lists.isEmpty(establecimientos)}"
+                                >
+
+                                    <td
+                                        colspan="7"
+                                        class="text-center py-5"
+                                    >
+
+                                        <i
+                                            class="bi bi-shop
+                                            display-5 text-secondary"
+                                        ></i>
+
+
+                                        <h5
+                                            class="mt-3 fw-bold"
+                                        >
+                                            No se encontraron establecimientos
+                                        </h5>
+
+
+                                        <p
+                                            class="text-secondary"
+                                        >
+                                            Intenta con otro nombre.
+                                        </p>
+
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+</body>
+
+</html>

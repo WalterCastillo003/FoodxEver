@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html
+    lang="es"
+    xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Productos | FoodxEver</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+
+    <!-- CSS FoodxEver -->
+
+    <link
+        rel="stylesheet"
+        th:href="@{/css/styles.css}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ===========================
+         NAVBAR
+    ============================ -->
+
+    <nav
+        class="navbar navbar-expand-lg
+        navbar-dark bg-success"
+    >
+
+        <div class="container">
+
+
+            <a
+                class="navbar-brand fw-bold"
+                th:href="@{/}"
+            >
+
+                <i
+                    class="bi bi-basket2-fill me-2"
+                ></i>
+
+                FoodxEver
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarFoodxEver"
+            >
+
+                <span
+                    class="navbar-toggler-icon"
+                ></span>
+
+            </button>
+
+
+            <div
+                class="collapse navbar-collapse"
+                id="navbarFoodxEver"
+            >
+
+                <ul class="navbar-nav ms-auto">
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/}"
+                        >
+                            Inicio
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link active"
+                            th:href="@{/productos}"
+                        >
+                            Productos
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/reservas}"
+                        >
+                            Reservas
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            th:href="@{/estadisticas}"
+                        >
+                            Estadísticas
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ===========================
+         ENCABEZADO
+    ============================ -->
+
+    <header
+        class="bg-light border-bottom py-5"
+    >
+
+        <div class="container">
+
+            <div
+                class="d-flex flex-column
+                flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3"
+            >
+
+                <div>
+
+                    <span
+                        class="text-success fw-bold"
+                    >
+                        FOODXEVER
+                    </span>
+
+
+                    <h1 class="fw-bold mt-2">
+
+                        Gestión de productos
+
+                    </h1>
+
+
+                    <p
+                        class="text-secondary mb-0"
+                    >
+
+                        Administra los alimentos
+                        disponibles en la plataforma.
+
+                    </p>
+
+                </div>
+
+
+                <a
+                    th:href="@{/productos/nuevo}"
+                    class="btn btn-success btn-lg"
+                >
+
+                    <i
+                        class="bi bi-plus-circle me-2"
+                    ></i>
+
+                    Nuevo producto
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ===========================
+         CONTENIDO
+    ============================ -->
+
+    <main class="py-5">
+
+        <div class="container">
+
+
+            <!-- ======================
+                 BUSCADOR
+            ======================= -->
+
+            <form
+                th:action="@{/productos/buscar}"
+                method="get"
+                class="mb-4"
+            >
+
+                <div class="row g-2">
+
+
+                    <div class="col-md-9">
+
+                        <input
+                            type="text"
+                            name="nombre"
+                            class="form-control form-control-lg"
+                            placeholder="Buscar producto por nombre..."
+                            th:value="${busqueda}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-3 d-grid">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg"
+                        >
+
+                            <i
+                                class="bi bi-search me-1"
+                            ></i>
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+            </form>
+
+
+
+            <!-- VOLVER A TODOS -->
+
+            <div
+                class="mb-4"
+                th:if="${busqueda != null and !busqueda.isEmpty()}"
+            >
+
+                <a
+                    th:href="@{/productos}"
+                    class="btn btn-outline-secondary"
+                >
+
+                    <i
+                        class="bi bi-arrow-left me-1"
+                    ></i>
+
+                    Mostrar todos
+
+                </a>
+
+            </div>
+
+
+
+            <!-- ======================
+                 TABLA
+            ======================= -->
+
+            <div
+                class="card border-0 shadow-sm"
+            >
+
+                <div
+                    class="card-body p-0"
+                >
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table table-hover
+                            align-middle mb-0"
+                        >
+
+                            <thead
+                                class="table-light"
+                            >
+
+                                <tr>
+
+                                    <th class="ps-4">
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Producto
+                                    </th>
+
+                                    <th>
+                                        Categoría
+                                    </th>
+
+                                    <th>
+                                        Precio
+                                    </th>
+
+                                    <th>
+                                        Stock
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th
+                                        class="text-center"
+                                    >
+                                        Acciones
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                <!-- =========================
+                                     THYMELEAF RECORRE PRODUCTOS
+                                ========================== -->
+
+                                <tr
+                                    th:each="producto : ${productos}"
+                                >
+
+
+                                    <td
+                                        class="ps-4"
+                                        th:text="${producto.id}"
+                                    >
+                                        1
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong
+                                            th:text="${producto.nombre}"
+                                        >
+                                            Producto
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            class="badge
+                                            text-bg-light"
+                                            th:text="${producto.categoria}"
+                                        >
+                                            Categoría
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            class="fw-semibold
+                                            text-success"
+                                            th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}"
+                                        >
+                                            S/ 0.00
+                                        </span>
+
+                                    </td>
+
+
+                                    <td
+                                        th:text="${producto.stock}"
+                                    >
+                                        0
+                                    </td>
+
+
+                                    <!-- ESTADO -->
+
+                                    <td>
+
+                                        <span
+                                            th:if="${producto.activo}"
+                                            class="badge bg-success"
+                                        >
+                                            Activo
+                                        </span>
+
+
+                                        <span
+                                            th:unless="${producto.activo}"
+                                            class="badge bg-secondary"
+                                        >
+                                            Inactivo
+                                        </span>
+
+                                    </td>
+
+
+
+                                    <!-- ACCIONES -->
+
+                                    <td>
+
+                                        <div
+                                            class="d-flex
+                                            justify-content-center
+                                            flex-wrap gap-2"
+                                        >
+
+
+                                            <!-- DETALLE -->
+
+                                            <a
+                                                th:href="@{/productos/detalle/{id}(id=${producto.id})}"
+                                                class="btn
+                                                btn-outline-primary
+                                                btn-sm"
+                                            >
+
+                                                <i
+                                                    class="bi bi-eye"
+                                                ></i>
+
+                                                Ver
+
+                                            </a>
+
+
+
+                                            <!-- EDITAR -->
+
+                                            <a
+                                                th:href="@{/productos/editar/{id}(id=${producto.id})}"
+                                                class="btn
+                                                btn-outline-success
+                                                btn-sm"
+                                            >
+
+                                                <i
+                                                    class="bi bi-pencil"
+                                                ></i>
+
+                                                Editar
+
+                                            </a>
+
+
+
+                                            <!-- ELIMINAR -->
+
+                                            <form
+                                                th:action="@{/productos/eliminar/{id}(id=${producto.id})}"
+                                                method="post"
+                                                onsubmit="return confirm('¿Deseas eliminar este producto?');"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn
+                                                    btn-outline-danger
+                                                    btn-sm"
+                                                >
+
+                                                    <i
+                                                        class="bi bi-trash"
+                                                    ></i>
+
+                                                    Eliminar
+
+                                                </button>
+
+                                            </form>
+
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+
+
+                                <!-- =========================
+                                     SIN PRODUCTOS
+                                ========================== -->
+
+                                <tr
+                                    th:if="${#lists.isEmpty(productos)}"
+                                >
+
+                                    <td
+                                        colspan="7"
+                                        class="text-center py-5"
+                                    >
+
+                                        <i
+                                            class="bi bi-search
+                                            display-5
+                                            text-secondary"
+                                        ></i>
+
+
+                                        <h5
+                                            class="mt-3 fw-bold"
+                                        >
+                                            No se encontraron productos
+                                        </h5>
+
+
+                                        <p
+                                            class="text-secondary mb-0"
+                                        >
+                                            Intenta realizar otra búsqueda.
+                                        </p>
+
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- Bootstrap JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+</body>
+
+</html>

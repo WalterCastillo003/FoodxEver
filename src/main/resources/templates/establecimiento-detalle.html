@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html
+    lang="es"
+    xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Detalle del establecimiento | FoodxEver</title>
+
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+</head>
+
+
+<body class="bg-light">
+
+
+    <nav
+        class="navbar navbar-dark
+        bg-success"
+    >
+
+        <div class="container">
+
+            <a
+                class="navbar-brand fw-bold"
+                th:href="@{/}"
+            >
+
+                <i
+                    class="bi bi-basket2-fill me-2"
+                ></i>
+
+                FoodxEver
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <main class="py-5">
+
+        <div class="container">
+
+            <div
+                class="row justify-content-center"
+            >
+
+                <div class="col-lg-8">
+
+
+                    <a
+                        th:href="@{/establecimientos}"
+                        class="btn
+                        btn-outline-secondary mb-4"
+                    >
+
+                        <i
+                            class="bi bi-arrow-left"
+                        ></i>
+
+                        Volver
+
+                    </a>
+
+
+
+                    <div
+                        class="card border-0
+                        shadow-sm"
+                    >
+
+                        <div
+                            class="card-body p-5"
+                        >
+
+
+                            <div
+                                class="d-flex
+                                align-items-center gap-3 mb-4"
+                            >
+
+                                <div
+                                    class="bg-success
+                                    bg-opacity-10
+                                    text-success
+                                    rounded-circle
+                                    d-flex
+                                    align-items-center
+                                    justify-content-center"
+                                    style="
+                                        width: 70px;
+                                        height: 70px;
+                                        font-size: 1.8rem;
+                                    "
+                                >
+
+                                    <i class="bi bi-shop"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span
+                                        class="text-success fw-bold"
+                                        th:text="${establecimiento.categoria}"
+                                    >
+                                        Categoría
+                                    </span>
+
+
+                                    <h1
+                                        class="h2 fw-bold mb-0"
+                                        th:text="${establecimiento.nombre}"
+                                    >
+                                        Establecimiento
+                                    </h1>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <hr>
+
+
+
+                            <div class="row g-4 mt-2">
+
+
+                                <div class="col-md-6">
+
+                                    <small
+                                        class="text-secondary"
+                                    >
+                                        Dirección
+                                    </small>
+
+
+                                    <p class="fw-semibold">
+
+                                        <i
+                                            class="bi bi-geo-alt
+                                            text-success me-1"
+                                        ></i>
+
+
+                                        <span
+                                            th:text="${establecimiento.direccion}"
+                                        >
+                                            Dirección
+                                        </span>
+
+                                    </p>
+
+                                </div>
+
+
+
+                                <div class="col-md-6">
+
+                                    <small
+                                        class="text-secondary"
+                                    >
+                                        Teléfono
+                                    </small>
+
+
+                                    <p class="fw-semibold">
+
+                                        <i
+                                            class="bi bi-telephone
+                                            text-success me-1"
+                                        ></i>
+
+
+                                        <span
+                                            th:text="${establecimiento.telefono}"
+                                        >
+                                            Teléfono
+                                        </span>
+
+                                    </p>
+
+                                </div>
+
+
+
+                                <div class="col-12">
+
+                                    <small
+                                        class="text-secondary"
+                                    >
+                                        Correo electrónico
+                                    </small>
+
+
+                                    <p class="fw-semibold">
+
+                                        <i
+                                            class="bi bi-envelope
+                                            text-success me-1"
+                                        ></i>
+
+
+                                        <span
+                                            th:text="${establecimiento.correo}"
+                                        >
+                                            Correo
+                                        </span>
+
+                                    </p>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <hr>
+
+
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    th:href="@{/establecimientos/editar/{id}(id=${establecimiento.id})}"
+                                    class="btn btn-success"
+                                >
+
+                                    <i
+                                        class="bi bi-pencil me-1"
+                                    ></i>
+
+                                    Editar
+
+                                </a>
+
+
+                                <a
+                                    th:href="@{/establecimientos}"
+                                    class="btn
+                                    btn-outline-secondary"
+                                >
+                                    Establecimientos
+                                </a>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

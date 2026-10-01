@@ -1,0 +1,1508 @@
+/* ===============================
+   CONFIGURACIÓN GENERAL
+================================ */
+
+:root {
+    --fr-green: #198754;
+    --fr-dark-green: #11643d;
+    --fr-light-green: #eaf7ef;
+    --fr-dark: #18251f;
+    --fr-gray: #6c757d;
+    --fr-background: #f8faf9;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--fr-dark);
+    background-color: #ffffff;
+}
+
+
+/* ===============================
+   NAVBAR
+================================ */
+
+.navbar {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+}
+
+.nav-link {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+
+/* ===============================
+   HERO
+================================ */
+
+.hero-section {
+    background:
+        linear-gradient(
+            120deg,
+            #ffffff 0%,
+            #f3fbf6 100%
+        );
+
+    overflow: hidden;
+}
+
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.hero-section h1 {
+    line-height: 1.05;
+}
+
+.hero-card {
+    position: relative;
+    max-width: 550px;
+    margin: auto;
+}
+
+.hero-image {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.12);
+}
+
+
+
+.hero-offer-card {
+    position: absolute;
+
+    left: -25px;
+    bottom: 30px;
+
+    width: 240px;
+
+    background-color: white;
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.15);
+}
+
+.offer-icon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background-color: var(--fr-light-green);
+
+    color: var(--fr-green);
+
+    font-size: 1.5rem;
+}
+
+
+/* ===============================
+   TÍTULOS
+================================ */
+
+.section-label {
+    font-size: 0.8rem;
+
+    font-weight: bold;
+
+    color: var(--fr-green);
+
+    letter-spacing: 2px;
+}
+
+
+/* ===============================
+   CÓMO FUNCIONA
+================================ */
+
+.step-card {
+    background-color: white;
+
+    padding: 35px 30px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+    border: 1px solid #eeeeee;
+}
+
+.step-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.08);
+}
+
+.step-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background-color: var(--fr-light-green);
+
+    color: var(--fr-green);
+
+    font-size: 1.8rem;
+}
+
+
+/* ===============================
+   PRODUCTOS
+================================ */
+
+.food-card {
+    border: none;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.food-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(0, 0, 0, 0.13);
+}
+
+.food-image {
+    height: 220px;
+
+    object-fit: cover;
+}
+
+.discount-badge {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    background-color: #ffc107;
+
+    color: #212529;
+
+    font-weight: bold;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+}
+
+.food-price {
+    color: var(--fr-green);
+
+    font-size: 1.4rem;
+
+    font-weight: bold;
+}
+
+
+/* ===============================
+   IMPACTO
+================================ */
+
+.impact-section {
+    background-color: var(--fr-green);
+
+    color: white;
+}
+
+.impact-number {
+    font-size: 2.1rem;
+
+    font-weight: bold;
+}
+
+
+/* ===============================
+   CTA
+================================ */
+
+.cta-box {
+    background-color: var(--fr-light-green);
+
+    padding: 60px 20px;
+
+    border-radius: 25px;
+}
+
+.cta-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background-color: white;
+
+    color: var(--fr-green);
+
+    font-size: 1.8rem;
+}
+
+
+/* ===============================
+   FOOTER
+================================ */
+
+.footer {
+    border-top: 1px solid #eeeeee;
+
+    background-color: white;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 991px) {
+
+    .min-vh-75 {
+        min-height: auto;
+
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+
+    .hero-image {
+        height: 400px;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-image {
+        height: 330px;
+    }
+
+    .hero-offer-card {
+        left: 10px;
+        right: 10px;
+        bottom: 15px;
+
+        width: auto;
+    }
+
+    .impact-number {
+        font-size: 1.6rem;
+    }
+
+}
+
+/* =========================================
+   PÁGINA EXPLORAR
+========================================= */
+
+.explore-header {
+    background:
+        linear-gradient(
+            120deg,
+            #f5fbf7 0%,
+            #ffffff 100%
+        );
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+
+.search-container {
+    max-width: 850px;
+}
+
+.search-container .input-group {
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.08);
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.search-container .form-control,
+.search-container .input-group-text {
+    border-color: #e5e5e5;
+}
+
+.search-container .form-control:focus {
+    box-shadow: none;
+
+    border-color: #198754;
+}
+
+
+/* =========================================
+   CATEGORÍAS
+========================================= */
+
+.category-btn {
+    background-color: #f5f5f5;
+
+    border: 1px solid #e7e7e7;
+
+    border-radius: 50px;
+
+    padding: 9px 18px;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.category-btn:hover {
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    border-color: #198754;
+}
+
+.category-btn.active {
+    background-color: #198754;
+
+    color: white;
+
+    border-color: #198754;
+}
+
+
+/* =========================================
+   INFORMACIÓN DEL PRODUCTO
+========================================= */
+
+.category-label {
+    color: #198754;
+
+    font-size: 0.75rem;
+
+    letter-spacing: 1px;
+
+    font-weight: bold;
+}
+
+
+
+.availability {
+    font-size: 0.72rem;
+
+    font-weight: 600;
+
+    padding: 5px 9px;
+
+    border-radius: 50px;
+}
+
+.availability.available {
+    background-color: #eaf7ef;
+
+    color: #198754;
+}
+
+.availability.limited {
+    background-color: #fff3cd;
+
+    color: #856404;
+}
+
+
+/* =========================================
+   FAVORITOS
+========================================= */
+
+.favorite-btn {
+    position: absolute;
+
+    top: 15px;
+    left: 15px;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background-color: white;
+
+    color: #333333;
+
+    font-size: 1.2rem;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.08);
+
+    color: #dc3545;
+}
+
+.favorite-btn.active {
+    color: #dc3545;
+}
+
+
+/* =========================================
+   SIN RESULTADOS
+========================================= */
+
+.no-results-icon {
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 2rem;
+}
+
+
+/* =========================================
+   SELECT DE ORDENAMIENTO
+========================================= */
+
+#sortProducts {
+    width: auto;
+
+    min-width: 170px;
+}
+
+
+/* =========================================
+   RESPONSIVE EXPLORAR
+========================================= */
+
+@media (max-width: 576px) {
+
+    .search-container .btn {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .category-btn {
+        font-size: 0.9rem;
+
+        padding: 8px 14px;
+    }
+
+    #sortProducts {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================
+   PÁGINA DE PRODUCTO
+========================================= */
+
+.product-page {
+    background-color: #fbfcfb;
+}
+
+
+
+.product-image-container {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    background-color: #eeeeee;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.1);
+}
+
+
+.product-detail-image {
+    width: 100%;
+
+    height: 520px;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+
+.product-discount {
+    position: absolute;
+
+    top: 20px;
+    left: 20px;
+
+    background-color: #ffc107;
+
+    color: #212529;
+
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+}
+
+
+
+.product-favorite-btn {
+    position: absolute;
+
+    top: 20px;
+    right: 20px;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background-color: white;
+
+    font-size: 1.3rem;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.product-favorite-btn:hover {
+    transform: scale(1.08);
+
+    color: #dc3545;
+}
+
+
+.product-favorite-btn.active {
+    color: #dc3545;
+}
+
+
+/* =========================================
+   INFORMACIÓN PRODUCTO
+========================================= */
+
+.product-info {
+    background-color: white;
+
+    padding: 10px 5px;
+}
+
+
+.product-main-price {
+    color: #198754;
+
+    font-size: 2rem;
+
+    font-weight: bold;
+}
+
+
+.product-original-price {
+    color: #6c757d;
+
+    font-size: 1.1rem;
+
+    text-decoration: line-through;
+}
+
+
+
+.pickup-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background-color: #f5fbf7;
+}
+
+
+.pickup-icon {
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #e2f4e9;
+
+    color: #198754;
+
+    font-size: 1.4rem;
+}
+
+
+/* =========================================
+   INFORMACIÓN ADICIONAL
+========================================= */
+
+.product-information-card,
+.store-information-card {
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+
+.surprise-warning {
+    display: flex;
+
+    padding: 16px;
+
+    margin-top: 20px;
+
+    border-radius: 12px;
+
+    background-color: #fff8e1;
+
+    color: #725900;
+}
+
+
+/* =========================================
+   ESTABLECIMIENTO
+========================================= */
+
+.store-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 1.6rem;
+}
+
+
+.store-feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    color: #495057;
+
+    font-size: 0.9rem;
+}
+
+
+.store-feature i {
+    color: #198754;
+}
+
+
+/* =========================================
+   PASOS PARA RECOJO
+========================================= */
+
+.pickup-instructions {
+    padding-top: 30px;
+
+    padding-bottom: 30px;
+}
+
+
+.pickup-step {
+    height: 100%;
+
+    padding: 30px;
+
+    text-align: center;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 18px;
+}
+
+
+.pickup-step-number {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background-color: #198754;
+
+    color: white;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   RESPONSIVE PRODUCTO
+========================================= */
+
+@media (max-width: 991px) {
+
+    .product-detail-image {
+        height: 450px;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .product-detail-image {
+        height: 340px;
+    }
+
+
+    .product-information-card,
+    .store-information-card {
+        padding: 22px;
+    }
+
+
+    .product-main-price {
+        font-size: 1.7rem;
+    }
+
+}
+
+
+/* =========================================
+   PÁGINA MIS RESERVAS
+========================================= */
+
+.reservations-header {
+    background:
+        linear-gradient(
+            120deg,
+            #f5fbf7 0%,
+            #ffffff 100%
+        );
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+/* =========================================
+   RESUMEN
+========================================= */
+
+.reservation-summary-card {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 22px;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+.summary-icon {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 1.4rem;
+}
+
+
+/* =========================================
+   TARJETA DE RESERVA
+========================================= */
+
+.reservation-card {
+    overflow: hidden;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.06);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.reservation-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.09);
+}
+
+
+.reservation-image {
+    width: 100%;
+    height: 230px;
+
+    object-fit: cover;
+}
+
+
+.reservation-card-body {
+    padding: 24px;
+}
+
+
+/* =========================================
+   ESTADOS
+========================================= */
+
+.reservation-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 11px;
+
+    border-radius: 50px;
+
+    font-size: 0.78rem;
+
+    font-weight: 600;
+}
+
+
+.reservation-status.pending {
+    background-color: #fff3cd;
+
+    color: #856404;
+}
+
+
+.reservation-status.cancelled {
+    background-color: #f8d7da;
+
+    color: #842029;
+}
+
+
+.reservation-status.completed {
+    background-color: #d1e7dd;
+
+    color: #0f5132;
+}
+
+
+/* =========================================
+   INFORMACIÓN
+========================================= */
+
+.reservation-detail {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    color: #6c757d;
+}
+
+
+.reservation-detail i {
+    color: #198754;
+
+    margin-top: 2px;
+}
+
+
+.reservation-total-box {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 14px 16px;
+
+    margin-top: 18px;
+
+    border-radius: 12px;
+
+    background-color: #f7faf8;
+}
+
+
+.reservation-total-price {
+    color: #198754;
+
+    font-size: 1.3rem;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   ESTADO VACÍO
+========================================= */
+
+.empty-reservations {
+    max-width: 600px;
+
+    margin: 60px auto;
+
+    padding: 50px 25px;
+
+    background-color: #f8faf9;
+
+    border-radius: 22px;
+}
+
+
+.empty-reservations-icon {
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 2.3rem;
+}
+
+
+/* =========================================
+   MODAL CANCELACIÓN
+========================================= */
+
+.cancel-modal-icon {
+    width: 75px;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 5px auto 20px;
+
+    border-radius: 50%;
+
+    background-color: #fff3cd;
+
+    color: #856404;
+
+    font-size: 2rem;
+}
+
+
+/* =========================================
+   RESPONSIVE RESERVAS
+========================================= */
+
+@media (max-width: 576px) {
+
+    .reservation-card-body {
+        padding: 20px;
+    }
+
+    .reservation-image {
+        height: 210px;
+    }
+
+}
+
+/* =========================================
+   LOGIN Y REGISTRO
+========================================= */
+
+.auth-body {
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f3fbf6 0%,
+            #ffffff 50%,
+            #eaf7ef 100%
+        );
+}
+
+
+.auth-container {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+
+.auth-logo {
+    color: #198754;
+
+    font-size: 1.8rem;
+
+    font-weight: bold;
+}
+
+
+.auth-card {
+    padding: 40px;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.09);
+}
+
+
+.auth-card .form-control,
+.auth-card .form-select {
+    min-height: 48px;
+}
+
+
+.auth-card .input-group-text {
+    background-color: #f8f9fa;
+}
+
+
+.auth-card .form-control:focus,
+.auth-card .form-select:focus {
+    border-color: #198754;
+
+    box-shadow:
+        0 0 0 0.2rem
+        rgba(25, 135, 84, 0.15);
+}
+
+
+
+.auth-divider {
+    position: relative;
+
+    margin: 30px 0;
+
+    text-align: center;
+}
+
+
+.auth-divider::before {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+
+    width: 100%;
+    height: 1px;
+
+    background-color: #e5e5e5;
+}
+
+
+.auth-divider span {
+    position: relative;
+
+    padding: 0 15px;
+
+    background-color: white;
+
+    color: #8a8a8a;
+}
+
+
+
+@media (max-width: 576px) {
+
+    .auth-card {
+        padding: 28px 22px;
+
+        border-radius: 18px;
+    }
+
+}
+
+
+/* =========================================
+   PANEL ESTABLECIMIENTO - FOODXEVER
+========================================= */
+
+.dashboard-body {
+    background-color: #f8faf9;
+}
+
+
+.dashboard-header {
+    background:
+        linear-gradient(
+            120deg,
+            #f0faf4 0%,
+            #ffffff 100%
+        );
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+/* =========================================
+   ESTADÍSTICAS
+========================================= */
+
+.dashboard-stat-card {
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 22px;
+
+    background-color: white;
+
+    border-radius: 18px;
+
+    border: 1px solid #eeeeee;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+.dashboard-stat-icon {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 16px;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 1.5rem;
+}
+
+
+/* =========================================
+   OFERTAS DEL ESTABLECIMIENTO
+========================================= */
+
+.business-offer-card {
+    overflow: hidden;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.05);
+}
+
+
+.business-offer-image {
+    width: 100%;
+
+    height: 210px;
+
+    object-fit: cover;
+}
+
+
+.business-offer-body {
+    padding: 20px;
+}
+
+
+.offer-status {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 50px;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+}
+
+
+.offer-status.active {
+    background-color: #d1e7dd;
+
+    color: #0f5132;
+}
+
+
+.offer-status.inactive {
+    background-color: #e2e3e5;
+
+    color: #41464b;
+}
+
+
+/* =========================================
+   RESERVAS DEL NEGOCIO
+========================================= */
+
+.business-reservations-card {
+    overflow: hidden;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+.dashboard-table thead th {
+    padding: 17px;
+
+    background-color: #f7faf8;
+
+    color: #495057;
+
+    font-size: 0.85rem;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.dashboard-table td {
+    padding: 17px;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.dashboard-empty-state {
+    padding: 50px 25px;
+
+    text-align: center;
+
+    background-color: white;
+
+    border: 1px dashed #d8dedb;
+
+    border-radius: 18px;
+}
+
+
+.dashboard-empty-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eaf7ef;
+
+    color: #198754;
+
+    font-size: 1.8rem;
+}
+
+
+/* =========================================
+   RESPONSIVE DASHBOARD
+========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-table {
+        min-width: 800px;
+    }
+
+}
