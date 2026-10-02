@@ -3,10 +3,18 @@
     class="navbar navbar-expand-lg navbar-dark bg-success sticky-top"
 >
     <div class="container">
-        <a class="navbar-brand fw-bold" th:href="@{/}">
-            <i class="bi bi-basket2-fill me-2"></i>
+
+        <a
+            class="navbar-brand fw-bold"
+            th:href="@{/}"
+        >
+            <i
+                class="bi bi-basket2-fill me-2"
+            ></i>
+
             FoodxEver
         </a>
+
 
         <button
             class="navbar-toggler"
@@ -17,27 +25,237 @@
             aria-expanded="false"
             aria-label="Mostrar navegación"
         >
-            <span class="navbar-toggler-icon"></span>
+
+            <span
+                class="navbar-toggler-icon"
+            ></span>
+
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarFoodxEver">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarFoodxEver"
+        >
+
+            <ul
+                class="navbar-nav ms-auto
+                align-items-lg-center gap-lg-1"
+            >
+
+
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeSection == 'inicio'} ? ' active' : ''" th:href="@{/}">Inicio</a>
+
+                    <a
+                        class="nav-link"
+                        th:classappend="${activeSection == 'inicio'} ? ' active' : ''"
+                        th:href="@{/}"
+                    >
+                        Inicio
+                    </a>
+
                 </li>
+
+
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeSection == 'productos'} ? ' active' : ''" th:href="@{/productos}">Productos</a>
+
+                    <a
+                        class="nav-link"
+                        th:classappend="${activeSection == 'productos'} ? ' active' : ''"
+                        th:href="@{/productos}"
+                    >
+                        Productos
+                    </a>
+
                 </li>
+
+
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeSection == 'establecimientos'} ? ' active' : ''" th:href="@{/establecimientos}">Establecimientos</a>
+
+                    <a
+                        class="nav-link"
+                        th:classappend="${activeSection == 'establecimientos'} ? ' active' : ''"
+                        th:href="@{/establecimientos}"
+                    >
+                        Establecimientos
+                    </a>
+
                 </li>
+
+
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeSection == 'reservas'} ? ' active' : ''" th:href="@{/reservas}">Reservas</a>
+
+                    <a
+                        class="nav-link"
+                        th:classappend="${activeSection == 'reservas'} ? ' active' : ''"
+                        th:href="@{/reservas}"
+                    >
+                        Reservas
+                    </a>
+
                 </li>
+
+
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeSection == 'estadisticas'} ? ' active' : ''" th:href="@{/estadisticas}">Estadísticas</a>
+
+                    <a
+                        class="nav-link"
+                        th:classappend="${activeSection == 'estadisticas'} ? ' active' : ''"
+                        th:href="@{/estadisticas}"
+                    >
+                        Estadísticas
+                    </a>
+
                 </li>
+
+
+
+                <!-- =================================
+                     NO HAY SESIÓN
+                ================================== -->
+
+                <li
+                    class="nav-item ms-lg-2"
+                    th:if="${session.usuarioActual == null}"
+                >
+
+                    <a
+                        class="nav-link"
+                        th:href="@{/login}"
+                    >
+
+                        <i
+                            class="bi bi-box-arrow-in-right me-1"
+                        ></i>
+
+                        Iniciar sesión
+
+                    </a>
+
+                </li>
+
+
+                <li
+                    class="nav-item"
+                    th:if="${session.usuarioActual == null}"
+                >
+
+                    <a
+                        class="btn
+                        btn-light
+                        text-success
+                        fw-semibold
+                        ms-lg-2"
+                        th:href="@{/registro}"
+                    >
+                        Registrarse
+                    </a>
+
+                </li>
+
+
+
+                <!-- =================================
+                     USUARIO CONECTADO
+                ================================== -->
+
+                <li
+                    class="nav-item
+                    dropdown ms-lg-2"
+                    th:if="${session.usuarioActual != null}"
+                >
+
+                    <a
+                        class="nav-link
+                        dropdown-toggle
+                        fw-semibold"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+
+                        <i
+                            class="bi bi-person-circle me-1"
+                        ></i>
+
+                        <span
+                            th:text="${session.usuarioActual.nombre}"
+                        >
+                            Usuario
+                        </span>
+
+                    </a>
+
+
+                    <ul
+                        class="dropdown-menu
+                        dropdown-menu-end"
+                    >
+
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                th:href="@{/perfil}"
+                            >
+
+                                <i
+                                    class="bi bi-person me-2"
+                                ></i>
+
+                                Mi perfil
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <hr
+                                class="dropdown-divider"
+                            >
+
+                        </li>
+
+
+                        <li>
+
+                            <form
+                                th:action="@{/logout}"
+                                method="post"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="dropdown-item
+                                    text-danger"
+                                >
+
+                                    <i
+                                        class="bi
+                                        bi-box-arrow-right
+                                        me-2"
+                                    ></i>
+
+                                    Cerrar sesión
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    </ul>
+
+                </li>
+
+
             </ul>
+
         </div>
+
     </div>
+
 </nav>

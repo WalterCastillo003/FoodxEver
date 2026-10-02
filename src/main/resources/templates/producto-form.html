@@ -368,7 +368,77 @@
 
                                     </div>
 
+<!-- =========================
+     IMAGEN
+========================== -->
 
+<div class="col-12">
+
+    <label
+        for="imagen"
+        class="form-label fw-semibold"
+    >
+        Imagen del producto
+    </label>
+
+
+    <select
+        id="imagen"
+        class="form-select"
+        th:field="*{imagen}"
+        required
+    >
+
+        <option value="">
+            Seleccionar imagen
+        </option>
+
+
+        <option value="/img/panaderia.jpg">
+            Panadería
+        </option>
+
+
+        <option value="/img/postres.jpg">
+            Postres
+        </option>
+
+
+        <option value="/img/pizza.jpg">
+            Pizza
+        </option>
+
+
+        <option value="/img/frutas-verduras.jpg">
+            Frutas y verduras
+        </option>
+
+
+        <option value="/img/menu-ejecutivo.jpg">
+            Menú ejecutivo
+        </option>
+
+
+        <option value="/img/sandwich-cafe.jpg">
+            Sándwich y café
+        </option>
+
+
+        <option value="/img/hero-foodxever.jpg">
+            Alimentos variados
+        </option>
+
+    </select>
+
+
+    <div class="form-text">
+
+        Las imágenes están almacenadas
+        localmente dentro de FoodxEver.
+
+    </div>
+
+</div>
 
                                     <!-- =========================
                                          ACTIVO

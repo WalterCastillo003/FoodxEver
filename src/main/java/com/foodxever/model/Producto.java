@@ -3,22 +3,15 @@ package com.foodxever.model;
 public class Producto {
 
     private Long id;
-
     private String nombre;
-
     private String categoria;
-
     private double precio;
-
     private double precioOriginal;
-
     private int stock;
-
     private String descripcion;
-
     private String horarioRecojo;
-
     private boolean activo;
+    private String imagen;
 
 
     public Producto() {
@@ -34,7 +27,8 @@ public class Producto {
             int stock,
             String descripcion,
             String horarioRecojo,
-            boolean activo) {
+            boolean activo,
+            String imagen) {
 
         this.id = id;
         this.nombre = nombre;
@@ -45,13 +39,13 @@ public class Producto {
         this.descripcion = descripcion;
         this.horarioRecojo = horarioRecojo;
         this.activo = activo;
+        this.imagen = imagen;
     }
 
 
     public Long getId() {
         return id;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -62,7 +56,6 @@ public class Producto {
         return nombre;
     }
 
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -71,7 +64,6 @@ public class Producto {
     public String getCategoria() {
         return categoria;
     }
-
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
@@ -82,7 +74,6 @@ public class Producto {
         return precio;
     }
 
-
     public void setPrecio(double precio) {
         this.precio = precio;
     }
@@ -91,7 +82,6 @@ public class Producto {
     public double getPrecioOriginal() {
         return precioOriginal;
     }
-
 
     public void setPrecioOriginal(double precioOriginal) {
         this.precioOriginal = precioOriginal;
@@ -102,7 +92,6 @@ public class Producto {
         return stock;
     }
 
-
     public void setStock(int stock) {
         this.stock = stock;
     }
@@ -112,7 +101,6 @@ public class Producto {
         return descripcion;
     }
 
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -121,7 +109,6 @@ public class Producto {
     public String getHorarioRecojo() {
         return horarioRecojo;
     }
-
 
     public void setHorarioRecojo(
             String horarioRecojo) {
@@ -135,8 +122,16 @@ public class Producto {
         return activo;
     }
 
-
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }
