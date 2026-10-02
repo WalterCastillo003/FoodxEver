@@ -44,21 +44,29 @@ public class ProductoController {
     // MOSTRAR FORMULARIO NUEVO
     // ==========================================
 
-    @GetMapping("/nuevo")
-    public String nuevo(Model model) {
+@GetMapping("/nuevo")
+public String nuevo(Model model) {
 
-        model.addAttribute(
-                "producto",
-                new Producto()
-        );
+    Producto producto =
+            new Producto();
 
-        model.addAttribute(
-                "modoEdicion",
-                false
-        );
+    producto.setActivo(true);
 
-        return "producto-form";
-    }
+
+    model.addAttribute(
+            "producto",
+            producto
+    );
+
+
+    model.addAttribute(
+            "modoEdicion",
+            false
+    );
+
+
+    return "producto-form";
+}
 
 
     // ==========================================

@@ -1,0 +1,43 @@
+<nav
+    th:fragment="navbar(activeSection)"
+    class="navbar navbar-expand-lg navbar-dark bg-success sticky-top"
+>
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            <i class="bi bi-basket2-fill me-2"></i>
+            FoodxEver
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarFoodxEver"
+            aria-controls="navbarFoodxEver"
+            aria-expanded="false"
+            aria-label="Mostrar navegación"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarFoodxEver">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeSection == 'inicio'} ? ' active' : ''" th:href="@{/}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeSection == 'productos'} ? ' active' : ''" th:href="@{/productos}">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeSection == 'establecimientos'} ? ' active' : ''" th:href="@{/establecimientos}">Establecimientos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeSection == 'reservas'} ? ' active' : ''" th:href="@{/reservas}">Reservas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeSection == 'estadisticas'} ? ' active' : ''" th:href="@{/estadisticas}">Estadísticas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
