@@ -457,8 +457,7 @@ const foodProducts = {
 
         pickup: "7:00 PM - 9:00 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/panaderia.jpg",
 
         description:
             "Rescata una selección de productos preparados durante el día por Panadería San Miguel a un precio reducido.",
@@ -491,8 +490,7 @@ const foodProducts = {
 
         pickup: "8:00 PM - 9:30 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/postres.jpg",
 
         description:
             "Una selección de postres preparados durante el día que todavía se encuentran en buenas condiciones para su consumo.",
@@ -525,8 +523,7 @@ const foodProducts = {
 
         pickup: "9:00 PM - 10:00 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/pizza.jpg",
 
         description:
             "Pizza preparada durante el servicio del día que Pizza House ofrece mediante FoodxEver antes del cierre.",
@@ -559,8 +556,7 @@ const foodProducts = {
 
         pickup: "6:00 PM - 8:00 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/frutas-verduras.jpg",
 
         description:
             "Una selección de frutas y verduras que todavía pueden ser consumidas y que buscan evitar ser desperdiciadas.",
@@ -593,8 +589,7 @@ const foodProducts = {
 
         pickup: "4:00 PM - 5:30 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/menu-ejecutivo.jpg",
 
         description:
             "Menú preparado durante el servicio del restaurante y disponible por tiempo limitado para evitar su desperdicio.",
@@ -627,8 +622,7 @@ const foodProducts = {
 
         pickup: "5:30 PM - 7:30 PM",
 
-        image:
-            "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1000&q=80",
+        image: "/img/sandwich-cafe.jpg",
 
         description:
             "Una combinación de sándwich y bebida ofrecida por Good Morning Café al final de su horario de atención.",
