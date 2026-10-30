@@ -42,3 +42,8 @@ Thumbs.db
 ### Temporales ###
 *.tmp
 *.temp
+### Secretos locales (no subir a GitHub)
+.env
+.env.*
+application-local.properties
+

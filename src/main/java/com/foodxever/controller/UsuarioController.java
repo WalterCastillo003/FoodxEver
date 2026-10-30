@@ -138,6 +138,16 @@ public class UsuarioController {
         // VALIDACIONES
         // --------------------------------------
 
+        // El formulario público solo admite los dos tipos de cuenta mostrados.
+        // No confiamos únicamente en las opciones del HTML, ya que una petición
+        // podría enviarse manualmente con un rol distinto como ADMIN.
+        if (usuario.getRol() == null ||
+                (!"CONSUMIDOR".equalsIgnoreCase(usuario.getRol()) &&
+                 !"ESTABLECIMIENTO".equalsIgnoreCase(usuario.getRol()))) {
+            model.addAttribute("error", "Selecciona un tipo de cuenta válido.");
+            return "registro";
+        }
+
         if (
                 usuario.getNombre() == null ||
                 usuario.getNombre().isBlank() ||

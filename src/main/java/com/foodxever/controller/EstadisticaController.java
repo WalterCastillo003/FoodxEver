@@ -75,58 +75,23 @@ public class EstadisticaController {
         // PRODUCTOS POR CATEGORÍA
         // ======================================
 
-        Map<String, Integer> productosPorCategoria =
-                new LinkedHashMap<>();
-
-        productosPorCategoria.put(
-                "Panadería",
-                0
-        );
-
-        productosPorCategoria.put(
-                "Cafetería",
-                0
-        );
-
-        productosPorCategoria.put(
-                "Restaurante",
-                0
-        );
-
-        productosPorCategoria.put(
-                "Market",
-                0
-        );
-
+        Map<String, Integer> productosPorCategoria = new java.util.TreeMap<>();
 
         for (Producto producto : productos) {
-
-            String categoria =
-                    producto.getCategoria();
-
-            productosPorCategoria.put(
-                    categoria,
-                    productosPorCategoria
-                            .getOrDefault(
-                                    categoria,
-                                    0
-                            ) + 1
-            );
+            String categoria = producto.getCategoria();
+            if (categoria != null && !categoria.isBlank()) {
+                productosPorCategoria.merge(categoria, 1, Integer::sum);
+            }
         }
-
 
         model.addAttribute(
                 "categorias",
-                new ArrayList<>(
-                        productosPorCategoria.keySet()
-                )
+                new ArrayList<>(productosPorCategoria.keySet())
         );
 
         model.addAttribute(
                 "cantidadPorCategoria",
-                new ArrayList<>(
-                        productosPorCategoria.values()
-                )
+                new ArrayList<>(productosPorCategoria.values())
         );
 
 

@@ -1,194 +1,88 @@
 package com.foodxever.service;
 
 import com.foodxever.model.Establecimiento;
+import com.foodxever.repository.EstablecimientoRepository;
+import com.foodxever.repository.HorarioRecojoRepository;
+import com.foodxever.repository.ProductoRepository;
+import com.foodxever.repository.ResenaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class EstablecimientoService {
+    private final EstablecimientoRepository establecimientoRepository;
+    private final ProductoRepository productoRepository;
+    private final HorarioRecojoRepository horarioRecojoRepository;
+    private final ResenaRepository resenaRepository;
 
-    private final List<Establecimiento> establecimientos =
-            new ArrayList<>();
-
-    private final AtomicLong contadorId =
-            new AtomicLong(1);
-
-
-    public EstablecimientoService() {
-
-        agregar(new Establecimiento(
-                null,
-                "Panadería San Miguel",
-                "San Miguel",
-                "Panadería",
-                "987654321",
-                "sanmiguel@foodxever.com"
-        ));
-
-        agregar(new Establecimiento(
-                null,
-                "Café Central",
-                "Pueblo Libre",
-                "Cafetería",
-                "987654322",
-                "cafecentral@foodxever.com"
-        ));
-
-        agregar(new Establecimiento(
-                null,
-                "Pizza House",
-                "Magdalena",
-                "Restaurante",
-                "987654323",
-                "pizzahouse@foodxever.com"
-        ));
+    public EstablecimientoService(EstablecimientoRepository establecimientoRepository,
+                                  ProductoRepository productoRepository,
+                                  HorarioRecojoRepository horarioRecojoRepository,
+                                  ResenaRepository resenaRepository) {
+        this.establecimientoRepository = establecimientoRepository;
+        this.productoRepository = productoRepository;
+        this.horarioRecojoRepository = horarioRecojoRepository;
+        this.resenaRepository = resenaRepository;
     }
-
-
-    // LISTAR
 
     public List<Establecimiento> listar() {
-
-        return new ArrayList<>(
-                establecimientos
-        );
+        return establecimientoRepository.findByActivoTrueOrderByIdAsc();
     }
 
-
-    // AGREGAR
-
-    public Establecimiento agregar(
-            Establecimiento establecimiento) {
-
-        establecimiento.setId(
-                contadorId.getAndIncrement()
-        );
-
-        establecimientos.add(
-                establecimiento
-        );
-
-        return establecimiento;
+    public Establecimiento agregar(Establecimiento establecimiento) {
+        establecimiento.setActivo(true);
+        return establecimientoRepository.save(establecimiento);
     }
 
-
-    // CONSULTAR
-
-    public Optional<Establecimiento> buscarPorId(
-            Long id) {
-
-        return establecimientos.stream()
-                .filter(
-                        establecimiento ->
-                                establecimiento
-                                        .getId()
-                                        .equals(id)
-                )
-                .findFirst();
+    public Optional<Establecimiento> buscarPorId(Long id) {
+        return establecimientoRepository.findById(id);
     }
 
-
-    // BUSCAR
-
-    public List<Establecimiento> buscarPorNombre(
-            String nombre) {
-
-        if (nombre == null || nombre.isBlank()) {
-            return listar();
-        }
-
-        String texto =
-                nombre.toLowerCase();
-
-        return establecimientos.stream()
-                .filter(
-                        establecimiento ->
-                                establecimiento
-                                        .getNombre()
-                                        .toLowerCase()
-                                        .contains(texto)
-                )
-                .toList();
+    public List<Establecimiento> buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) return listar();
+        return establecimientoRepository.findByNombreContainingIgnoreCaseAndActivoTrueOrderByIdAsc(nombre.trim());
     }
 
-
-    public List<Establecimiento> buscarPorCategoria(
-            String categoria) {
-
-        if (categoria == null || categoria.isBlank()) {
-            return listar();
-        }
-
-        return establecimientos.stream()
-                .filter(
-                        establecimiento ->
-                                establecimiento
-                                        .getCategoria()
-                                        .equalsIgnoreCase(categoria)
-                )
-                .toList();
+    public List<Establecimiento> buscarPorCategoria(String categoria) {
+        if (categoria == null || categoria.isBlank()) return listar();
+        return establecimientoRepository.findByCategoriaIgnoreCaseAndActivoTrueOrderByIdAsc(categoria.trim());
     }
 
-
-    // ACTUALIZAR
-
-    public boolean actualizar(
-            Long id,
-            Establecimiento actualizado) {
-
-        Optional<Establecimiento> resultado =
-                buscarPorId(id);
-
-        if (resultado.isEmpty()) {
-            return false;
-        }
-
-        Establecimiento establecimiento =
-                resultado.get();
-
-        establecimiento.setNombre(
-                actualizado.getNombre()
-        );
-
-        establecimiento.setDireccion(
-                actualizado.getDireccion()
-        );
-
-        establecimiento.setCategoria(
-                actualizado.getCategoria()
-        );
-
-        establecimiento.setTelefono(
-                actualizado.getTelefono()
-        );
-
-        establecimiento.setCorreo(
-                actualizado.getCorreo()
-        );
-
+    @Transactional
+    public boolean actualizar(Long id, Establecimiento actualizado) {
+        Optional<Establecimiento> resultado = establecimientoRepository.findById(id);
+        if (resultado.isEmpty()) return false;
+        Establecimiento existente = resultado.get();
+        existente.setNombre(actualizado.getNombre());
+        existente.setDireccion(actualizado.getDireccion());
+        existente.setCategoria(actualizado.getCategoria());
+        existente.setTelefono(actualizado.getTelefono());
+        existente.setCorreo(actualizado.getCorreo());
+        establecimientoRepository.save(existente);
         return true;
     }
 
-
-    // ELIMINAR
-
+    @Transactional
     public boolean eliminar(Long id) {
-
-        return establecimientos.removeIf(
-                establecimiento ->
-                        establecimiento
-                                .getId()
-                                .equals(id)
-        );
+        Optional<Establecimiento> resultado = establecimientoRepository.findById(id);
+        if (resultado.isEmpty()) return false;
+        Establecimiento establecimiento = resultado.get();
+        boolean tieneRelaciones = productoRepository.existsByEstablecimientoRef_Id(id)
+                || horarioRecojoRepository.existsByEstablecimiento_Id(id)
+                || !resenaRepository.findByEstablecimiento_IdOrderByFechaCreacionDesc(id).isEmpty();
+        if (tieneRelaciones) {
+            // Conservamos productos, reseñas y horarios históricos vinculados.
+            establecimiento.setActivo(false);
+            establecimientoRepository.save(establecimiento);
+        } else {
+            establecimientoRepository.delete(establecimiento);
+        }
+        return true;
     }
 
-
     public int contar() {
-
-        return establecimientos.size();
+        return listar().size();
     }
 }

@@ -1,248 +1,120 @@
 package com.foodxever.service;
 
+import com.foodxever.model.HistorialReserva;
 import com.foodxever.model.Reserva;
+import com.foodxever.repository.HistorialReservaRepository;
+import com.foodxever.repository.PagoRepository;
+import com.foodxever.repository.ResenaRepository;
+import com.foodxever.repository.ReservaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ReservaService {
+    private final ReservaRepository reservaRepository;
+    private final HistorialReservaRepository historialRepository;
+    private final PagoRepository pagoRepository;
+    private final ResenaRepository resenaRepository;
 
-    private final List<Reserva> reservas =
-            new ArrayList<>();
-
-    private final AtomicLong contadorId =
-            new AtomicLong(1);
-
-
-    public ReservaService() {
-
-        agregar(new Reserva(
-                null,
-                1L,
-                "Pack sorpresa de panadería",
-                "Cliente Demo",
-                1,
-                8.90,
-                "Pendiente"
-        ));
+    public ReservaService(ReservaRepository reservaRepository,
+                          HistorialReservaRepository historialRepository,
+                          PagoRepository pagoRepository,
+                          ResenaRepository resenaRepository) {
+        this.reservaRepository = reservaRepository;
+        this.historialRepository = historialRepository;
+        this.pagoRepository = pagoRepository;
+        this.resenaRepository = resenaRepository;
     }
-
-
-    // ================================
-    // LISTAR
-    // ================================
 
     public List<Reserva> listar() {
-
-        return new ArrayList<>(reservas);
+        return reservaRepository.findAllByOrderByIdDesc();
     }
 
-
-    // ================================
-    // AGREGAR
-    // ================================
-
+    @Transactional
     public Reserva agregar(Reserva reserva) {
-
-        reserva.setId(
-                contadorId.getAndIncrement()
-        );
-
-        // Si no se eligió un estado,
-        // automáticamente será Pendiente.
-
-        if (
-                reserva.getEstado() == null ||
-                reserva.getEstado().isBlank()
-        ) {
-
+        if (reserva.getEstado() == null || reserva.getEstado().isBlank()) {
             reserva.setEstado("Pendiente");
         }
-
-        reservas.add(reserva);
-
-        return reserva;
+        Reserva guardada = reservaRepository.save(reserva);
+        historialRepository.save(new HistorialReserva(guardada, null, guardada.getEstado(), "Reserva creada"));
+        return guardada;
     }
 
-
-    // ================================
-    // CONSULTAR POR ID
-    // ================================
-
-    public Optional<Reserva> buscarPorId(
-            Long id) {
-
-        return reservas.stream()
-                .filter(
-                        reserva ->
-                                reserva
-                                        .getId()
-                                        .equals(id)
-                )
-                .findFirst();
+    public Optional<Reserva> buscarPorId(Long id) {
+        return reservaRepository.findById(id);
     }
 
+    public List<Reserva> buscarPorCliente(String cliente) {
+        if (cliente == null || cliente.isBlank()) return listar();
+        return reservaRepository.findByClienteContainingIgnoreCaseOrderByIdDesc(cliente.trim());
+    }
 
-    // ================================
-    // BUSCAR POR CLIENTE
-    // ================================
+    public List<Reserva> buscarPorProducto(String producto) {
+        if (producto == null || producto.isBlank()) return listar();
+        return reservaRepository.findByProductoNombreContainingIgnoreCaseOrderByIdDesc(producto.trim());
+    }
 
-    public List<Reserva> buscarPorCliente(
-            String cliente) {
+    @Transactional
+    public boolean actualizar(Long id, Reserva actualizada) {
+        Optional<Reserva> resultado = reservaRepository.findById(id);
+        if (resultado.isEmpty()) return false;
+        Reserva actual = resultado.get();
+        String estadoAnterior = actual.getEstado();
 
-        if (cliente == null || cliente.isBlank()) {
-            return listar();
+        if (actualizada.getProductoRef() != null) {
+            actual.setProductoRef(actualizada.getProductoRef());
+        } else {
+            actual.setProductoId(actualizada.getProductoId());
         }
-
-        String texto =
-                cliente.toLowerCase();
-
-        return reservas.stream()
-                .filter(
-                        reserva ->
-                                reserva
-                                        .getCliente()
-                                        .toLowerCase()
-                                        .contains(texto)
-                )
-                .toList();
-    }
-
-
-    // ================================
-    // BUSCAR POR PRODUCTO
-    // ================================
-
-    public List<Reserva> buscarPorProducto(
-            String producto) {
-
-        if (producto == null || producto.isBlank()) {
-            return listar();
+        actual.setProductoNombre(actualizada.getProductoNombre());
+        actual.setCliente(actualizada.getCliente());
+        actual.setCantidad(actualizada.getCantidad());
+        actual.setTotal(actualizada.getTotal());
+        if (actualizada.getEstado() != null && !actualizada.getEstado().isBlank()) {
+            actual.setEstado(actualizada.getEstado());
         }
-
-        String texto =
-                producto.toLowerCase();
-
-        return reservas.stream()
-                .filter(
-                        reserva ->
-                                reserva
-                                        .getProductoNombre()
-                                        .toLowerCase()
-                                        .contains(texto)
-                )
-                .toList();
-    }
-
-
-    // ================================
-    // ACTUALIZAR
-    // ================================
-
-    public boolean actualizar(
-            Long id,
-            Reserva actualizada) {
-
-        Optional<Reserva> resultado =
-                buscarPorId(id);
-
-        if (resultado.isEmpty()) {
-            return false;
+        Reserva guardada = reservaRepository.save(actual);
+        if (!estadoAnterior.equalsIgnoreCase(guardada.getEstado())) {
+            historialRepository.save(new HistorialReserva(guardada, estadoAnterior,
+                    guardada.getEstado(), "Estado actualizado desde el formulario"));
         }
-
-        Reserva reserva =
-                resultado.get();
-
-        reserva.setProductoId(
-                actualizada.getProductoId()
-        );
-
-        reserva.setProductoNombre(
-                actualizada.getProductoNombre()
-        );
-
-        reserva.setCliente(
-                actualizada.getCliente()
-        );
-
-        reserva.setCantidad(
-                actualizada.getCantidad()
-        );
-
-        reserva.setTotal(
-                actualizada.getTotal()
-        );
-
-        reserva.setEstado(
-                actualizada.getEstado()
-        );
-
         return true;
     }
 
-
-    // ================================
-    // CAMBIAR ESTADO
-    // ================================
-
-    public boolean cambiarEstado(
-            Long id,
-            String estado) {
-
-        Optional<Reserva> resultado =
-                buscarPorId(id);
-
-        if (resultado.isEmpty()) {
-            return false;
-        }
-
-        resultado
-                .get()
-                .setEstado(estado);
-
+    @Transactional
+    public boolean cambiarEstado(Long id, String estado) {
+        Optional<Reserva> resultado = reservaRepository.findById(id);
+        if (resultado.isEmpty()) return false;
+        Reserva reserva = resultado.get();
+        String anterior = reserva.getEstado();
+        if (estado == null || estado.isBlank() || anterior.equalsIgnoreCase(estado)) return true;
+        reserva.setEstado(estado);
+        Reserva guardada = reservaRepository.save(reserva);
+        historialRepository.save(new HistorialReserva(guardada, anterior, estado, "Cambio de estado de reserva"));
         return true;
     }
 
-
-    // ================================
-    // ELIMINAR
-    // ================================
-
+    @Transactional
     public boolean eliminar(Long id) {
-
-        return reservas.removeIf(
-                reserva ->
-                        reserva
-                                .getId()
-                                .equals(id)
-        );
+        Optional<Reserva> resultado = reservaRepository.findById(id);
+        if (resultado.isEmpty()) return false;
+        // No se elimina una reserva si forma parte de un pago o una reseña.
+        // Así se conserva la integridad referencial de las tablas relacionadas.
+        if (pagoRepository.existsByReserva_Id(id) || resenaRepository.existsByReserva_Id(id)) {
+            return false;
+        }
+        historialRepository.deleteByReserva_Id(id);
+        reservaRepository.delete(resultado.get());
+        return true;
     }
 
-
-    // ================================
-    // ESTADÍSTICAS
-    // ================================
-
-    public long contarPorEstado(
-            String estado) {
-
-        return reservas.stream()
-                .filter(
-                        reserva ->
-                                reserva
-                                        .getEstado()
-                                        .equalsIgnoreCase(estado)
-                )
-                .count();
+    public long contarPorEstado(String estado) {
+        return reservaRepository.countByEstadoIgnoreCase(estado);
     }
-
 
     public int contar() {
-
-        return reservas.size();
+        return Math.toIntExact(reservaRepository.count());
     }
 }

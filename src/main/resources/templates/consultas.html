@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas DTO | FoodxEver</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+<nav th:replace="~{fragments/navbar :: navbar('consultas')}"></nav>
+<main class="container py-5">
+    <div class="mb-4">
+        <span class="text-success fw-bold">FOODXEVER · TERCER AVANCE</span>
+        <h1 class="h2 fw-bold mt-2">Consultas relacionadas con DTO</h1>
+        <p class="text-secondary">Estos listados combinan datos de varias tablas sin enviar las entidades completas a la vista.</p>
+    </div>
+
+    <section class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <h2 class="h5 fw-bold">Filtro de establecimiento</h2>
+            <form method="get" th:action="@{/consultas}" class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label for="establecimientoId" class="form-label">Establecimiento</label>
+                    <select class="form-select" id="establecimientoId" name="establecimientoId">
+                        <option value="">Todos los establecimientos</option>
+                        <option th:each="establecimiento : ${establecimientos}"
+                                th:value="${establecimiento.id}"
+                                th:selected="${establecimientoSeleccionado != null and establecimientoSeleccionado.equals(establecimiento.id)}"
+                                th:text="${establecimiento.nombre}">
+                            Establecimiento
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button class="btn btn-success" type="submit"><i class="bi bi-search me-1"></i>Consultar</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/consultas}">Limpiar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h2 class="h5 mb-1 fw-bold">1. Productos, categorías y establecimientos</h2>
+            <p class="small text-secondary mb-0">Consulta con JOIN de tres tablas, proyectada a ProductoEstablecimientoDTO.</p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-success">
+                <tr>
+                    <th>ID</th><th>Producto</th><th>Categoría</th><th>Establecimiento</th><th>Dirección</th><th>Precio</th><th>Stock</th><th>Recojo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="producto : ${productosDTO}">
+                    <td th:text="${producto.productoId}">1</td>
+                    <td class="fw-semibold" th:text="${producto.productoNombre}">Producto</td>
+                    <td><span class="badge text-bg-light" th:text="${producto.categoria}">Categoría</span></td>
+                    <td th:text="${producto.establecimiento}">Establecimiento</td>
+                    <td th:text="${producto.direccion}">Dirección</td>
+                    <td th:text="|S/ ${#numbers.formatDecimal(producto.precio, 1, 2)}|">S/ 0.00</td>
+                    <td th:text="${producto.stock}">0</td>
+                    <td th:text="${producto.horarioRecojo}">Horario</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(productosDTO)}"><td colspan="8" class="text-center text-secondary py-4">No hay productos para este filtro.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h2 class="h5 mb-1 fw-bold">2. Reservas y establecimientos</h2>
+            <p class="small text-secondary mb-0">Consulta con JOIN de reservas, productos y establecimientos, proyectada a ReservaResumenDTO.</p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-success">
+                <tr>
+                    <th>Reserva</th><th>Cliente</th><th>Producto</th><th>Establecimiento</th><th>Cantidad</th><th>Total</th><th>Estado</th><th>Fecha</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reserva : ${reservasDTO}">
+                    <td th:text="${reserva.reservaId}">1</td>
+                    <td th:text="${reserva.cliente}">Cliente</td>
+                    <td th:text="${reserva.producto}">Producto</td>
+                    <td th:text="${reserva.establecimiento}">Establecimiento</td>
+                    <td th:text="${reserva.cantidad}">1</td>
+                    <td th:text="|S/ ${#numbers.formatDecimal(reserva.total, 1, 2)}|">S/ 0.00</td>
+                    <td><span class="badge text-bg-secondary" th:text="${reserva.estado}">Pendiente</span></td>
+                    <td th:text="${reserva.fechaCreacion != null ? reserva.fechaCreacion : '-'}">Fecha</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(reservasDTO)}"><td colspan="8" class="text-center text-secondary py-4">Todavía no hay reservas para este filtro.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

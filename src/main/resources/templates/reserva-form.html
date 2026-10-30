@@ -157,45 +157,40 @@
 
 
 
-                                    <!-- PRODUCTO -->
-
-                                    <div class="col-md-8">
-
-                                        <label
-                                            class="form-label fw-semibold"
-                                        >
-                                            Producto
-                                        </label>
-
-
-                                        <select
-                                            class="form-select"
-                                            id="productoSelect"
-                                            th:field="*{productoId}"
-                                            required
-                                        >
-
-                                            <option value="">
-                                                Selecciona un producto
+                                    <!-- ESTABLECIMIENTO: PRIMER DESPLEGABLE -->
+                                    <div class="col-md-6">
+                                        <label for="establecimientoSelect" class="form-label fw-semibold">Establecimiento</label>
+                                        <select class="form-select"
+                                                id="establecimientoSelect"
+                                                th:field="*{establecimientoId}"
+                                                th:attr="data-establecimiento-inicial=${reserva.establecimientoId}"
+                                                required>
+                                            <option value="">Selecciona un establecimiento</option>
+                                            <option th:each="establecimiento : ${establecimientos}"
+                                                    th:value="${establecimiento.id}"
+                                                    th:text="${establecimiento.nombre}">
+                                                Establecimiento
                                             </option>
+                                        </select>
+                                    </div>
 
-
-                                            <option
-                                                th:each="producto : ${productos}"
-                                                th:value="${producto.id}"
-                                                th:text="${producto.nombre
-                                                    + ' - S/ '
-                                                    + #numbers.formatDecimal(producto.precio, 1, 2)
-                                                    + ' - Stock: '
-                                                    + producto.stock}"
-                                                th:attr="data-precio=${producto.precio}"
-                                            >
+                                    <!-- PRODUCTO: SEGUNDO DESPLEGABLE DEPENDIENTE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold" for="productoSelect">Producto</label>
+                                        <select class="form-select"
+                                                id="productoSelect"
+                                                th:field="*{productoId}"
+                                                th:attr="data-edicion=${modoEdicion}"
+                                                required>
+                                            <option value="">Selecciona un producto</option>
+                                            <option th:each="producto : ${productos}"
+                                                    th:value="${producto.id}"
+                                                    th:text="${producto.nombre + ' - S/ ' + #numbers.formatDecimal(producto.precio, 1, 2) + ' - Stock: ' + producto.stock}"
+                                                    th:attr="data-precio=${producto.precio}">
                                                 Producto
                                             </option>
-
-
                                         </select>
-
+                                        <div class="form-text">La lista mostrará los productos del establecimiento seleccionado.</div>
                                     </div>
 
 
@@ -354,72 +349,74 @@
 
 
 
-    <!-- CÁLCULO VISUAL -->
-
+    <!-- LISTAS EN CASCADA Y CÁLCULO VISUAL -->
     <script>
-
-        const productoSelect =
-            document.getElementById(
-                "productoSelect"
-            );
-
-        const cantidadInput =
-            document.getElementById(
-                "cantidadInput"
-            );
-
-        const totalPreview =
-            document.getElementById(
-                "totalPreview"
-            );
-
+        const establecimientoSelect = document.getElementById("establecimientoSelect");
+        const productoSelect = document.getElementById("productoSelect");
+        const cantidadInput = document.getElementById("cantidadInput");
+        const totalPreview = document.getElementById("totalPreview");
+        const esEdicion = productoSelect.dataset.edicion === "true";
+        const establecimientoInicial = establecimientoSelect.dataset.establecimientoInicial || establecimientoSelect.value;
+        const productoInicialId = productoSelect.value;
+        const opcionInicial = productoSelect.selectedOptions[0];
+        const textoProductoInicial = opcionInicial ? opcionInicial.textContent : "Producto reservado";
+        const precioProductoInicial = opcionInicial ? (opcionInicial.dataset.precio || "0") : "0";
 
         function actualizarTotal() {
-
-            const option =
-                productoSelect.options[
-                    productoSelect.selectedIndex
-                ];
-
-
-            const precio =
-                Number(
-                    option?.dataset.precio || 0
-                );
-
-
-            const cantidad =
-                Number(
-                    cantidadInput.value || 0
-                );
-
-
-            const total =
-                precio * cantidad;
-
-
-            totalPreview.textContent =
-                "S/ " + total.toFixed(2);
-
+            const option = productoSelect.options[productoSelect.selectedIndex];
+            const precio = Number(option?.dataset.precio || 0);
+            const cantidad = Number(cantidadInput.value || 0);
+            totalPreview.textContent = "S/ " + (precio * cantidad).toFixed(2);
         }
 
+        async function cargarProductos(mantenerSeleccion = true) {
+            const establecimientoId = establecimientoSelect.value;
+            const seleccionadoAnterior = mantenerSeleccion ? productoSelect.value : "";
+            productoSelect.replaceChildren(new Option("Selecciona un producto", ""));
+            if (!establecimientoId) {
+                actualizarTotal();
+                return;
+            }
 
-        productoSelect.addEventListener(
-            "change",
-            actualizarTotal
-        );
+            productoSelect.disabled = true;
+            try {
+                const respuesta = await fetch(`/reservas/productos-por-establecimiento/${establecimientoId}`);
+                if (!respuesta.ok) throw new Error("No se pudieron cargar los productos.");
+                const productos = await respuesta.json();
+                productos.forEach(producto => {
+                    const texto = `${producto.nombre} - S/ ${Number(producto.precio).toFixed(2)} - Stock: ${producto.stock}`;
+                    const opcion = new Option(texto, producto.id);
+                    opcion.dataset.precio = producto.precio;
+                    productoSelect.add(opcion);
+                });
 
+                // En modo edición, conserva la referencia histórica si el producto
+                // ya no está disponible en el catálogo actual.
+                if (esEdicion && establecimientoId === String(establecimientoInicial)
+                        && productoInicialId && !productos.some(p => String(p.id) === String(productoInicialId))) {
+                    const historico = new Option(textoProductoInicial, productoInicialId);
+                    historico.dataset.precio = precioProductoInicial;
+                    productoSelect.add(historico);
+                }
 
-        cantidadInput.addEventListener(
-            "input",
-            actualizarTotal
-        );
+                if (seleccionadoAnterior && [...productoSelect.options].some(o => o.value === String(seleccionadoAnterior))) {
+                    productoSelect.value = seleccionadoAnterior;
+                } else if (productoInicialId && esEdicion && establecimientoId === String(establecimientoInicial)) {
+                    productoSelect.value = productoInicialId;
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                productoSelect.disabled = false;
+                actualizarTotal();
+            }
+        }
 
-
-        actualizarTotal();
-
+        establecimientoSelect.addEventListener("change", () => cargarProductos(false));
+        productoSelect.addEventListener("change", actualizarTotal);
+        cantidadInput.addEventListener("input", actualizarTotal);
+        document.addEventListener("DOMContentLoaded", () => cargarProductos(true));
     </script>
-
 
 </body>
 

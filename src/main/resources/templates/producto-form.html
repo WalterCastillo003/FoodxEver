@@ -119,6 +119,8 @@
                                  FORMULARIO
                             ================================== -->
 
+                            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+
                             <form
                                 th:action="${modoEdicion}
                                     ? @{/productos/actualizar/{id}(id=${producto.id})}
@@ -159,52 +161,45 @@
 
 
                                     <!-- =========================
-                                         CATEGORÍA
+                                         ESTABLECIMIENTO
                                     ========================== -->
 
                                     <div class="col-md-6">
-
-                                        <label
-                                            for="categoria"
-                                            class="form-label fw-semibold"
-                                        >
-                                            Categoría
+                                        <label for="establecimientoSelect" class="form-label fw-semibold">
+                                            Establecimiento
                                         </label>
-
-
-                                        <select
-                                            id="categoria"
-                                            class="form-select"
-                                            th:field="*{categoria}"
-                                            required
-                                        >
-
-                                            <option value="">
-                                                Seleccionar categoría
+                                        <select id="establecimientoSelect"
+                                                class="form-select"
+                                                th:field="*{establecimientoId}"
+                                                required>
+                                            <option value="">Seleccionar establecimiento</option>
+                                            <option th:each="establecimiento : ${establecimientos}"
+                                                    th:value="${establecimiento.id}"
+                                                    th:text="${establecimiento.nombre + ' (' + establecimiento.categoria + ')'}">
+                                                Establecimiento
                                             </option>
-
-
-                                            <option value="Panadería">
-                                                Panadería
-                                            </option>
-
-
-                                            <option value="Cafetería">
-                                                Cafetería
-                                            </option>
-
-
-                                            <option value="Restaurante">
-                                                Restaurante
-                                            </option>
-
-
-                                            <option value="Market">
-                                                Market
-                                            </option>
-
                                         </select>
+                                        <div class="form-text">Las categorías disponibles dependen del tipo de establecimiento.</div>
+                                    </div>
 
+                                    <!-- =========================
+                                         CATEGORÍA EN CASCADA
+                                    ========================== -->
+
+                                    <div class="col-md-6">
+                                        <label for="categoria" class="form-label fw-semibold">Categoría</label>
+                                        <select id="categoria"
+                                                class="form-select"
+                                                th:field="*{categoria}"
+                                                th:attr="data-categoria-inicial=${producto.categoria}"
+                                                required>
+                                            <option value="">Seleccionar categoría</option>
+                                            <option th:each="categoria : ${categorias}"
+                                                    th:value="${categoria.nombre}"
+                                                    th:text="${categoria.nombre}">
+                                                Categoría
+                                            </option>
+                                        </select>
                                     </div>
 
 
@@ -570,6 +565,40 @@
     <!-- =========================================
          BOOTSTRAP JS
     ========================================== -->
+
+    <script>
+        const establecimientoSelect = document.getElementById("establecimientoSelect");
+        const categoriaSelect = document.getElementById("categoria");
+
+        async function cargarCategorias(valorPreferido = "") {
+            const establecimientoId = establecimientoSelect.value;
+            const categoriasIniciales = categoriaSelect.dataset.categoriaInicial || "";
+            const valorActual = valorPreferido || categoriaSelect.value || categoriasIniciales;
+
+            categoriaSelect.replaceChildren(new Option("Seleccionar categoría", ""));
+            if (!establecimientoId) return;
+
+            categoriaSelect.disabled = true;
+            try {
+                const respuesta = await fetch(`/productos/categorias-por-establecimiento/${establecimientoId}`);
+                if (!respuesta.ok) throw new Error("No se pudieron cargar las categorías.");
+                const categorias = await respuesta.json();
+                categorias.forEach(categoria => {
+                    categoriaSelect.add(new Option(categoria.nombre, categoria.nombre));
+                });
+                if (categorias.some(categoria => categoria.nombre === valorActual)) {
+                    categoriaSelect.value = valorActual;
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                categoriaSelect.disabled = false;
+            }
+        }
+
+        establecimientoSelect.addEventListener("change", () => cargarCategorias(""));
+        document.addEventListener("DOMContentLoaded", () => cargarCategorias(categoriaSelect.dataset.categoriaInicial || ""));
+    </script>
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

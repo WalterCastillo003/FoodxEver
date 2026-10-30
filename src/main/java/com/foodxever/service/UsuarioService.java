@@ -1,142 +1,66 @@
 package com.foodxever.service;
 
+import com.foodxever.model.Rol;
 import com.foodxever.model.Usuario;
-
+import com.foodxever.repository.RolRepository;
+import com.foodxever.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class UsuarioService {
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private final List<Usuario> usuarios =
-            new ArrayList<>();
-
-    private final AtomicLong contadorId =
-            new AtomicLong(1);
-
-
-    public UsuarioService() {
-
-        // Usuario de demostración
-
-        agregar(
-                new Usuario(
-                        null,
-                        "Usuario Demo",
-                        "demo@foodxever.com",
-                        "123456",
-                        "CONSUMIDOR",
-                        null
-                )
-        );
+    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-
-
-    // ==========================================
-    // LISTAR
-    // ==========================================
 
     public List<Usuario> listar() {
-
-        return new ArrayList<>(usuarios);
+        return usuarioRepository.findAll();
     }
 
-
-    // ==========================================
-    // AGREGAR
-    // ==========================================
-
-    public Usuario agregar(
-            Usuario usuario) {
-
-        usuario.setId(
-                contadorId.getAndIncrement()
-        );
-
-        usuarios.add(usuario);
-
-        return usuario;
-    }
-
-
-    // ==========================================
-    // BUSCAR POR ID
-    // ==========================================
-
-    public Optional<Usuario> buscarPorId(
-            Long id) {
-
-        return usuarios
-                .stream()
-                .filter(
-                        usuario ->
-                                usuario.getId()
-                                        .equals(id)
-                )
-                .findFirst();
-    }
-
-
-    // ==========================================
-    // BUSCAR POR CORREO
-    // ==========================================
-
-    public Optional<Usuario> buscarPorCorreo(
-            String correo) {
-
-        if (correo == null) {
-            return Optional.empty();
+    @Transactional
+    public Usuario agregar(Usuario usuario) {
+        String nombreRol = usuario.getRol();
+        if (nombreRol == null || nombreRol.isBlank()) nombreRol = "CONSUMIDOR";
+        final String rolBuscado = nombreRol.trim();
+        Rol rol = rolRepository.findByNombreIgnoreCase(rolBuscado)
+                .orElseGet(() -> rolRepository.save(new Rol(rolBuscado, "Rol de usuario FoodxEver")));
+        usuario.setRolRef(rol);
+        String contrasena = usuario.getContrasena();
+        if (contrasena != null && !contrasena.isBlank()
+                && !contrasena.startsWith("$2a$")
+                && !contrasena.startsWith("$2b$")
+                && !contrasena.startsWith("$2y$")) {
+            usuario.setContrasena(passwordEncoder.encode(contrasena));
         }
-
-        return usuarios
-                .stream()
-                .filter(
-                        usuario ->
-                                usuario.getCorreo()
-                                        .equalsIgnoreCase(
-                                                correo.trim()
-                                        )
-                )
-                .findFirst();
+        return usuarioRepository.save(usuario);
     }
 
-
-    // ==========================================
-    // VERIFICAR CORREO
-    // ==========================================
-
-    public boolean existeCorreo(
-            String correo) {
-
-        return buscarPorCorreo(correo)
-                .isPresent();
+    public Optional<Usuario> buscarPorId(Long id) {
+        return usuarioRepository.findById(id);
     }
 
+    public Optional<Usuario> buscarPorCorreo(String correo) {
+        if (correo == null || correo.isBlank()) return Optional.empty();
+        return usuarioRepository.findByCorreoIgnoreCase(correo.trim());
+    }
 
-    // ==========================================
-    // LOGIN
-    // ==========================================
+    public boolean existeCorreo(String correo) {
+        return correo != null && usuarioRepository.existsByCorreoIgnoreCase(correo.trim());
+    }
 
-    public Optional<Usuario> autenticar(
-            String correo,
-            String contrasena) {
-
-        return usuarios
-                .stream()
-                .filter(
-                        usuario ->
-                                usuario.getCorreo()
-                                        .equalsIgnoreCase(
-                                                correo.trim()
-                                        )
-                                &&
-                                usuario.getContrasena()
-                                        .equals(contrasena)
-                )
-                .findFirst();
+    public Optional<Usuario> autenticar(String correo, String contrasena) {
+        if (correo == null || contrasena == null) return Optional.empty();
+        return usuarioRepository.findByCorreoIgnoreCase(correo.trim())
+                .filter(usuario -> passwordEncoder.matches(contrasena, usuario.getContrasena()));
     }
 }
