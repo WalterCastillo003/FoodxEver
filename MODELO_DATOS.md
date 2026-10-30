@@ -44,4 +44,8 @@ Ambas aparecen en `/consultas` y admiten filtrar por establecimiento.
 
 ## Nota de alcance
 
-Las operaciones CRUD conectadas a la interfaz incluyen productos, establecimientos, reservas, pagos y reseñas. El registro/inicio de sesión persiste usuarios. Los roles y métodos de pago funcionan como catálogos; las categorías se usan en el formulario de productos; los horarios de recojo se almacenan por establecimiento; y el historial de reservas es una bitácora generada desde el backend para conservar la trazabilidad. Por su función, el historial no tiene edición manual desde la interfaz.
+La interfaz incorpora CRUD para diez tablas: usuarios, roles, establecimientos, categorías, productos, reservas, métodos de pago, pagos, reseñas y horarios de recojo. La undécima tabla, `historial_reservas`, es una bitácora automática de auditoría y se consulta en modo de solo lectura. Las restricciones de integridad impiden eliminar registros que todavía estén relacionados con datos operativos.
+
+## Operaciones administrativas
+
+El panel `/administracion` añade operaciones CRUD para roles, usuarios, categorías, métodos de pago y horarios de recojo. Sumadas a los CRUD existentes de establecimientos, productos, reservas, pagos y reseñas, quedan diez tablas gestionables mediante la interfaz. La undécima tabla (`historial_reservas`) se presenta en `/administracion/historial` en modo de consulta: los movimientos se generan automáticamente y no se editan ni eliminan manualmente.

@@ -8,4 +8,5 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     List<Pago> findAllByOrderByFechaPagoDesc();
     List<Pago> findByReserva_IdOrderByFechaPagoDesc(Long reservaId);
     boolean existsByReserva_Id(Long reservaId);
+    boolean existsByMetodoPago_Id(Long metodoPagoId);
 }

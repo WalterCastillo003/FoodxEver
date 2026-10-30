@@ -54,4 +54,19 @@ Cuenta de demostración en una base recién creada: `demo@foodxever.com` / `1234
 
 ## Alcance actual
 
-La interfaz mantiene CRUD para productos, establecimientos y reservas, registro/inicio de sesión persistentes para usuarios y ahora incluye pantallas CRUD para pagos y reseñas. Las tablas auxiliares de roles, categorías, métodos de pago, horarios e historial forman parte del modelo; roles es un catálogo controlado e historial funciona como bitácora de auditoría. Si el docente interpreta el requisito como CRUD manual de cada tabla sin excepción, conviene confirmar cómo evalúa tablas de catálogo y auditoría.
+La interfaz incorpora CRUD para diez tablas: usuarios, roles, establecimientos, categorías, productos, reservas, métodos de pago, pagos, reseñas y horarios de recojo. `historial_reservas` se consulta en modo de solo lectura porque es una bitácora automática de auditoría. Las eliminaciones de registros vinculados se bloquean para preservar las claves foráneas y los datos históricos.
+
+## F. Administración de las 10 tablas CRUD
+
+Antes de probar los enlaces administrativos, configura `FOODXEVER_ADMIN_EMAIL` y `FOODXEVER_ADMIN_PASSWORD` con valores propios de al menos 10 caracteres para la contraseña, tanto en local como en el servicio web de Railway. El primer administrador se crea solo si el correo configurado todavía no existe.
+
+- [ ] Inicio sesión con la cuenta `ADMIN` y aparece el menú Administración.
+- [ ] `/administracion/usuarios`: crear, editar y eliminar un usuario de prueba sin relaciones. Verificar que no se muestra ni se almacena la contraseña en texto plano.
+- [ ] `/administracion/roles`: crear, editar y eliminar un rol de prueba. Los tres roles del sistema están protegidos.
+- [ ] `/administracion/categorias`: crear, editar y eliminar una categoría de prueba que no tenga productos asociados.
+- [ ] `/administracion/metodos-pago`: crear, editar y eliminar un método de prueba que no tenga pagos asociados.
+- [ ] `/administracion/horarios`: crear, editar y eliminar un horario de prueba. Verificar que la hora de fin sea posterior a la de inicio.
+- [ ] `/administracion/historial`: consultar movimientos existentes y filtrar por reserva. No permite modificar la bitácora.
+- [ ] Verificar que las restricciones impidan eliminar roles, categorías, métodos o usuarios que tengan registros relacionados.
+
+Diez tablas tienen CRUD desde la interfaz: roles, usuarios, establecimientos, categorías, productos, reservas, métodos de pago, pagos, reseñas y horarios. `historial_reservas` es de solo lectura porque registra automáticamente los cambios de estado.

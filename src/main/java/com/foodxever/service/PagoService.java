@@ -43,7 +43,7 @@ public class PagoService {
     }
 
     public List<MetodoPago> listarMetodosPago() {
-        return metodoPagoRepository.findAllByOrderByNombreAsc();
+        return metodoPagoRepository.findByActivoTrueOrderByNombreAsc();
     }
 
     @Transactional
@@ -51,7 +51,8 @@ public class PagoService {
         Reserva reserva = reservaRepository.findById(reservaId)
                 .orElseThrow(() -> new IllegalArgumentException("Selecciona una reserva válida."));
         MetodoPago metodoPago = metodoPagoRepository.findById(metodoPagoId)
-                .orElseThrow(() -> new IllegalArgumentException("Selecciona un método de pago válido."));
+                .filter(MetodoPago::isActivo)
+                .orElseThrow(() -> new IllegalArgumentException("Selecciona un método de pago activo."));
 
         Pago pago = new Pago();
         pago.setReserva(reserva);
@@ -69,7 +70,8 @@ public class PagoService {
         Reserva reserva = reservaRepository.findById(reservaId)
                 .orElseThrow(() -> new IllegalArgumentException("Selecciona una reserva válida."));
         MetodoPago metodoPago = metodoPagoRepository.findById(metodoPagoId)
-                .orElseThrow(() -> new IllegalArgumentException("Selecciona un método de pago válido."));
+                .filter(MetodoPago::isActivo)
+                .orElseThrow(() -> new IllegalArgumentException("Selecciona un método de pago activo."));
 
         pago.setReserva(reserva);
         pago.setMetodoPago(metodoPago);

@@ -2,6 +2,7 @@ package com.foodxever.config;
 
 import com.foodxever.model.*;
 import com.foodxever.repository.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,12 @@ public class FoodxEverDataInitializer implements ApplicationRunner {
     private final HistorialReservaRepository historialRepository;
     private final HorarioRecojoRepository horarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${foodxever.admin.email:}")
+    private String adminEmail;
+
+    @Value("${foodxever.admin.password:}")
+    private String adminPassword;
 
     public FoodxEverDataInitializer(RolRepository rolRepository,
                                     UsuarioRepository usuarioRepository,
@@ -53,6 +60,7 @@ public class FoodxEverDataInitializer implements ApplicationRunner {
         crearRoles();
         crearCategorias();
         crearUsuarioDemo();
+        crearUsuarioAdminConfigurado();
         crearEstablecimientos();
         crearProductos();
         crearMetodosPago();
@@ -62,12 +70,15 @@ public class FoodxEverDataInitializer implements ApplicationRunner {
     }
 
     private void crearRoles() {
-        if (rolRepository.count() > 0) return;
-        rolRepository.saveAll(List.of(
-                new Rol("CONSUMIDOR", "Persona que reserva productos"),
-                new Rol("ESTABLECIMIENTO", "Gestiona ofertas de un establecimiento"),
-                new Rol("ADMIN", "Administración de FoodxEver")
-        ));
+        asegurarRol("CONSUMIDOR", "Persona que reserva productos");
+        asegurarRol("ESTABLECIMIENTO", "Gestiona ofertas de un establecimiento");
+        asegurarRol("ADMIN", "Administración de FoodxEver");
+    }
+
+    private void asegurarRol(String nombre, String descripcion) {
+        if (rolRepository.findByNombreIgnoreCase(nombre).isEmpty()) {
+            rolRepository.save(new Rol(nombre, descripcion));
+        }
     }
 
     private void crearCategorias() {
@@ -93,6 +104,29 @@ public class FoodxEverDataInitializer implements ApplicationRunner {
                 passwordEncoder.encode("123456"), "CONSUMIDOR", null);
         demo.setRolRef(consumidor);
         usuarioRepository.save(demo);
+    }
+
+    /**
+     * Crea un administrador inicial solo cuando se configuran credenciales externas.
+     * No hay contraseñas administrativas escritas en el repositorio.
+     */
+    private void crearUsuarioAdminConfigurado() {
+        if (adminEmail == null || adminEmail.isBlank()
+                || adminPassword == null || adminPassword.isBlank()) {
+            return;
+        }
+        String correo = adminEmail.trim().toLowerCase(java.util.Locale.ROOT);
+        if (usuarioRepository.existsByCorreoIgnoreCase(correo)) return;
+        if (adminPassword.length() < 10) {
+            throw new IllegalStateException("FOODXEVER_ADMIN_PASSWORD debe tener al menos 10 caracteres.");
+        }
+
+        Rol rolAdmin = rolRepository.findByNombreIgnoreCase("ADMIN")
+                .orElseThrow(() -> new IllegalStateException("No se encontró el rol ADMIN"));
+        Usuario admin = new Usuario(null, "Administrador FoodxEver", correo,
+                passwordEncoder.encode(adminPassword), "ADMIN", null);
+        admin.setRolRef(rolAdmin);
+        usuarioRepository.save(admin);
     }
 
     private void crearEstablecimientos() {

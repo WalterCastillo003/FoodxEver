@@ -14,6 +14,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     List<Reserva> findByProductoNombreContainingIgnoreCaseOrderByIdDesc(String productoNombre);
     long countByEstadoIgnoreCase(String estado);
     boolean existsByProductoRef_Id(Long productoId);
+    boolean existsByUsuarioRef_Id(Long usuarioId);
 
     @Query("""
         select new com.foodxever.dto.ReservaResumenDTO(

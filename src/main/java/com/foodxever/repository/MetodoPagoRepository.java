@@ -9,4 +9,6 @@ public interface MetodoPagoRepository extends JpaRepository<MetodoPago, Long> {
     List<MetodoPago> findByActivoTrueOrderByNombreAsc();
     List<MetodoPago> findAllByOrderByNombreAsc();
     Optional<MetodoPago> findByNombreIgnoreCase(String nombre);
+    boolean existsByNombreIgnoreCase(String nombre);
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id);
 }

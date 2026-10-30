@@ -138,6 +138,24 @@
 
 
 
+                <li class="nav-item dropdown" th:if="${session.usuarioActual != null and session.usuarioActual.rol == 'ADMIN'}">
+                    <a class="nav-link dropdown-toggle"
+                       th:classappend="${activeSection == 'administracion'} ? ' active' : ''"
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear me-1"></i>Administración
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/administracion}">Panel administrativo</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/usuarios}">Usuarios</a></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/roles}">Roles</a></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/categorias}">Categorías</a></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/metodos-pago}">Métodos de pago</a></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/horarios}">Horarios de recojo</a></li>
+                        <li><a class="dropdown-item" th:href="@{/administracion/historial}">Historial de reservas</a></li>
+                    </ul>
+                </li>
+
                 <!-- =================================
                      NO HAY SESIÓN
                 ================================== -->

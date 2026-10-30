@@ -8,4 +8,5 @@ public interface ResenaRepository extends JpaRepository<Resena, Long> {
     List<Resena> findAllByOrderByFechaCreacionDesc();
     List<Resena> findByEstablecimiento_IdOrderByFechaCreacionDesc(Long establecimientoId);
     boolean existsByReserva_Id(Long reservaId);
+    boolean existsByUsuario_Id(Long usuarioId);
 }

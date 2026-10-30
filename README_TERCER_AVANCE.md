@@ -79,3 +79,34 @@ No guardes estas credenciales en `application.properties`, GitHub ni en capturas
 - `http://localhost:8080/resenas`: CRUD de reseñas vinculadas a un usuario y a un establecimiento; la reserva es opcional. La calificación se valida entre 1 y 5.
 
 Ambos módulos utilizan servicios y repositorios Spring Data JPA, por lo que los datos se guardan en PostgreSQL. La tabla `historial_reservas` es de auditoría y se genera desde los cambios de estado de reservas; no conviene ofrecer edición manual de sus registros históricos.
+
+## Administración de las tablas del modelo
+
+Se ha incorporado un panel administrativo protegido por sesión y rol `ADMIN`:
+
+- `/administracion`: panel principal.
+- `/administracion/usuarios`: CRUD de cuentas. Las contraseñas se guardan con BCrypt y nunca se muestran en las tablas ni en los formularios de edición.
+- `/administracion/roles`: CRUD de roles personalizados. Los roles base `ADMIN`, `CONSUMIDOR` y `ESTABLECIMIENTO` están protegidos porque son necesarios para el funcionamiento de la aplicación. Un rol asignado a usuarios no se puede renombrar ni eliminar.
+- `/administracion/categorias`: CRUD de categorías compatibles con los tipos de establecimiento. Las categorías asignadas a productos no se pueden eliminar ni desactivar.
+- `/administracion/metodos-pago`: CRUD de métodos de pago. Los métodos utilizados por pagos existentes no se pueden eliminar ni desactivar.
+- `/administracion/horarios`: CRUD de horarios de recojo por establecimiento.
+- `/administracion/historial`: consulta de solo lectura del historial de reservas. Esta tabla es una bitácora automática, por lo que no permite edición o eliminación manual.
+
+De esta manera, diez tablas tienen operaciones CRUD desde la aplicación: `roles`, `usuarios`, `establecimientos`, `categorias`, `productos`, `reservas`, `metodos_pago`, `pagos`, `resenas` y `horarios_recojo`. La tabla restante, `historial_reservas`, conserva su propósito de auditoría y solo se consulta.
+
+### Crear el primer administrador en local
+
+El proyecto no contiene una contraseña administrativa fija. Para crear el primer administrador local, abre PowerShell en la carpeta que contiene `mvnw.cmd` y configura variables en esa misma terminal antes de arrancar Spring Boot:
+
+```powershell
+$env:FOODXEVER_ADMIN_EMAIL = 'admin@foodxever.com'
+$securePassword = Read-Host "Contraseña inicial del administrador (mínimo 10 caracteres)" -AsSecureString
+$env:FOODXEVER_ADMIN_PASSWORD = [System.Net.NetworkCredential]::new("", $securePassword).Password
+.\mvnw.cmd spring-boot:run
+```
+
+El comando solicita la contraseña sin mostrarla mientras la escribes. Usa una clave privada de al menos 10 caracteres; no la compartas ni la guardes en un archivo que se suba a GitHub. En el primer arranque, si ese correo todavía no existe, se crea la cuenta con rol `ADMIN` y contraseña cifrada mediante BCrypt. Si el correo ya existe, el inicializador no modifica esa cuenta.
+
+Para crear el administrador remoto, configura también `FOODXEVER_ADMIN_EMAIL` y `FOODXEVER_ADMIN_PASSWORD` como variables del **servicio web** en Railway (no en PostgreSQL) y aplica el despliegue. La base local y la base de Railway son independientes, por lo que el administrador se crea por separado en cada una. Si el correo elegido ya existe en la base remota, utiliza un correo administrativo distinto.
+
+Una vez creada la cuenta, inicia sesión en `/login`. El menú **Administración** aparecerá solo para cuentas con rol `ADMIN`. Desde Usuarios puedes actualizar la contraseña del administrador; al editarla, deja el campo de contraseña vacío para conservar la actual o escribe una nueva de al menos seis caracteres.

@@ -11,4 +11,5 @@ public interface EstablecimientoRepository extends JpaRepository<Establecimiento
     List<Establecimiento> findByNombreContainingIgnoreCaseAndActivoTrueOrderByIdAsc(String nombre);
     List<Establecimiento> findByCategoriaIgnoreCaseAndActivoTrueOrderByIdAsc(String categoria);
     Optional<Establecimiento> findByNombreIgnoreCase(String nombre);
+    boolean existsByPropietarioRef_Id(Long usuarioId);
 }
